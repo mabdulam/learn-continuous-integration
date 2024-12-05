@@ -44,8 +44,42 @@ First setup your machine or your teammate's machine to be the self hosted runner
 Answer the following questions:
 
 1. What does the __runs-on__ string  
+
+   The `runs-on` string specifies the type of runner that the GitHub Actions workflow uses to execute the job. In the `main.yml` file, it is set as:
+
+   ```yaml
+   runs-on: cs5500-self-hosted
+   ```
+
+    This means the workflow is configured to run on a self-hosted runner labeled cs5500-self-hosted. This runner is a machine you've set up yourself to execute GitHub Actions workflows, rather than using GitHub's hosted runners. The label cs5500-self-hosted helps GitHub identify which self-hosted runner to use when executing the workflow.
+
 2. In `main.yml`, on which branch do the jest tests run when a push to main branch is made?
+
+    The Jest tests run on the main branch when a push event occurs on that branch. This is specified in the workflow's on section:
+
+    ```yaml
+    Copy code
+    on:
+    push:
+        branches:
+        - main
+    ```
+
+    This configuration tells GitHub Actions to trigger the workflow whenever code is pushed to the main branch. The Jest tests will then run against the latest code on the main branch after the push.
+
 3. In `main.yml`, on which branch do the jest tests run when a pull request is submitted to the deploy branch?
+
+    The Jest tests run on the code as it would appear if the pull request were merged into the deploy branch. This is specified in the workflow's on section:
+
+    ```yaml
+    Copy code
+    on:
+    pull_request:
+        branches:
+        - deploy
+    ```
+
+    When a pull request is opened, synchronized, or reopened targeting the deploy branch, the workflow triggers. The Jest tests run against the merged code to ensure that the proposed changes are compatible with the deploy branch before the pull request is actually merged.
 
 Next, create a new workflow yml file that captures the following continuous integration requirement:
 
